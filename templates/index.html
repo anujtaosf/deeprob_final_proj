@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Animal Emotion Recognition</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />    
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <p class="venue">ROB 430 · University of Michigan · 2025</p>
+    <h1>Cross-Species Animal Emotion Recognition via a Multi-Stage Detection and Classification Pipeline</h1>
+    <div class="authors">
+      <span class="author">Mark Gibney</span>
+      <span class="author">Anna Novak</span>
+      <span class="author">Brendan Ohr</span>
+      <span class="author">Anuhea Tao</span>
+    </div>
+    <div class="header-links">
+      <a class="pill-link" href="https://github.com/anujtaosf/deeprob_final_proj" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- Try It -->
+  <section id="demo">
+    <h2>Try It!</h2>
+    <p>
+      Upload a photo of an animal to run our emotion recognition pipeline.
+    </p>
+
+    <div class="upload-area" id="drop-zone">
+      <input type="file" id="file-input" accept="image/png,image/jpeg" />
+      <div class="upload-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </div>
+      <p class="upload-label"><strong>Click to upload</strong></p>
+      <p class="upload-hint">PNG · JPG</p>
+    </div>
+
+    <div id="preview-container">
+      <img id="preview-img" src="" alt="Preview" />
+      <button class="btn-run" id="run-btn">Run Model</button>
+    </div>
+
+    <div id="result-box">
+      <p class="result-label">Detected Emotion</p>
+      <div class="spinner" id="spinner"></div>
+      <p class="result-species" id="species-text"></p>
+      <p class="result-emotion" id="emotion-text"></p>
+      <p class="result-confidence" id="confidence-text"></p>
+      <p class="result-threat" id="threat-text"></p>
+    </div>
+  </section>
+
+  <!-- Abstract -->
+  <section id="abstract">
+    <h2>Abstract</h2>
+    <p>
+      This study presents a unified framework for animal emotion detection that integrates robust object detection with cross-species emotion recognition. We propose a multi-stage pipeline that isolates relevant animal regions in real-world images to then apply a deep learning–based emotion recognition module to infer emotional states. We further investigate our model's performance across biologically related species, evaluating whether models trained on select species can generalize to previously unseen animals.
+    </p>
+    <!-- <p>
+      Understanding animal emotion is a critical component of advancing animal welfare and intelligent robot perception systems. Significant progress has been made in computer vision for animal detection and classification, but the ability to infer emotional states remains a challenging and relatively underexplored problem.
+    </p>
+    <p>
+      We propose a unified framework that combines robust animal detection with generalizable emotion recognition into a multi-staged pipeline capable of processing complex, real-world images. Our model isolates relevant animal regions before applying an emotion recognition module. Our primary contribution is the extension of emotion recognition across species boundaries — investigating whether models trained on certain species can transfer learned features to previously unseen but biologically similar species.
+    </p>
+    <p>
+      This approach aims to move toward scalable, well-performing recognition systems that reduce reliance on large labeled datasets across diverse animal populations.
+    </p> -->
+  </section>
+
+  <!-- Results -->
+  <section id="results">
+    <h2>Experimental Results</h2>
+
+    <!-- Sample prediction grid -->
+    <div class="results-sample-grid">
+      <div class="results-img-grid">
+        <figure class="results-figure">
+          <img src="{{ url_for('static', filename='images/cat_result.png') }}" alt="Cat result" />
+          <!-- <figcaption>Cat</figcaption> -->
+        </figure>
+        <figure class="results-figure">
+          <img src="{{ url_for('static', filename='images/tiger_result.png') }}" alt="Tiger result" />
+          <!-- <figcaption>Tiger</figcaption> -->
+        </figure>
+        <figure class="results-figure">
+          <img src="{{ url_for('static', filename='images/dog_result.png') }}" alt="Dog result" />
+          <!-- <figcaption>Dog</figcaption> -->
+        </figure>
+        <figure class="results-figure">
+          <img src="{{ url_for('static', filename='images/wolf_result.png') }}" alt="Wolf result" />
+          <!-- <figcaption>Wolf</figcaption> -->
+        </figure>
+      </div>
+    </div>
+
+    <!-- Training curves -->
+    <figure class="results-figure results-figure--full">
+      <img src="{{ url_for('static', filename='images/known_species.png') }}" alt="Known species training curves" />
+      <figcaption>Known species</figcaption>
+    </figure>
+
+    <figure class="results-figure results-figure--full">
+      <img src="{{ url_for('static', filename='images/unknown_species.png') }}" alt="Unknown species training curves" />
+      <figcaption>Unknown species</figcaption>
+    </figure>
+
+    <!-- Confusion matrix + per-emotion accuracy -->
+    <div class="results-two-col">
+      <figure class="results-figure">
+        <img src="{{ url_for('static', filename='images/confusion_matrix.png') }}" alt="Confusion matrix" />
+        <figcaption>Confusion Matrix</figcaption>
+      </figure>
+      <figure class="results-figure">
+        <img src="{{ url_for('static', filename='images/per_emotion_classification_accuracy.png') }}" alt="Per-emotion classification accuracy" />
+        <figcaption>Per-Emotion Accuracy</figcaption>
+      </figure>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+  const dropZone   = document.getElementById('drop-zone');
+  const fileInput  = document.getElementById('file-input');
+  const previewCon = document.getElementById('preview-container');
+  const previewImg = document.getElementById('preview-img');
+  const runBtn     = document.getElementById('run-btn');
+  const resultBox  = document.getElementById('result-box');
+  const speciesTxt = document.getElementById('species-text');
+  const emotionTxt = document.getElementById('emotion-text');
+  const confTxt    = document.getElementById('confidence-text');
+  const threatTxt  = document.getElementById('threat-text');
+  const spinner    = document.getElementById('spinner');
+
+  let selectedFile = null;
+
+  fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  });
+
+  function handleFile(file) {
+    if (!file) return;
+    selectedFile = file;
+    const url = URL.createObjectURL(file);
+    previewImg.src = url;
+    previewCon.style.display = 'block';
+    resultBox.style.display = 'none';
+  }
+
+  runBtn.addEventListener('click', async () => {
+    if (!selectedFile) return;
+
+    runBtn.disabled = true;
+    resultBox.style.display = 'block';
+    speciesTxt.textContent = '';
+    emotionTxt.textContent = '';
+    confTxt.textContent = '';
+    threatTxt.textContent = '';
+    spinner.style.display = 'block';
+
+    const fd = new FormData();
+    fd.append('image', selectedFile);
+
+    try {
+      const res = await fetch('/predict', { method: 'POST', body: fd });
+      const data = await res.json();
+
+      spinner.style.display = 'none';
+
+      if (data.error) {
+        speciesTxt.textContent = '';
+        emotionTxt.textContent = 'Error';
+        confTxt.textContent = data.error;
+        threatTxt.textContent = '';
+      } else {
+        speciesTxt.textContent = data.species.charAt(0).toUpperCase() + data.species.slice(1);
+        emotionTxt.textContent = data.emotion;
+        confTxt.textContent = `Confidence: ${(data.confidence * 100).toFixed(1)}%`;
+        threatTxt.textContent = `Threat score: ${(data.threat * 100).toFixed(0)}/100`;
+      }
+    } catch (err) {
+      spinner.style.display = 'none';
+      emotionTxt.textContent = 'Error';
+      confTxt.textContent = 'Could not connect to server.';
+    } finally {
+      runBtn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
