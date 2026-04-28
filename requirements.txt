@@ -1,0 +1,6 @@
+flask
+rembg
+"rembg[cpu]"
+torch
+torchvision
+ultralytics

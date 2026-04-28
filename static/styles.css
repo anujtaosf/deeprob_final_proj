@@ -1,0 +1,374 @@
+/* Credit to Claude for making the website look nice, we only cared about the content. */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #111111;
+      --mid: #555555;
+      --light: #999999;
+      --rule: #dddddd;
+      --bg: #ffffff;
+      --accent: #1a1a1a;
+      --hover: #f5f5f5;
+    }
+
+    body {
+      font-family: 'Source Serif 4', Georgia, serif;
+      background: var(--bg);
+      color: var(--black);
+      line-height: 1.7;
+      font-size: 17px;
+    }
+
+    /* ── Layout ── */
+    header {
+      border-bottom: 2px solid var(--black);
+      padding: 48px 0 36px;
+    }
+
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    section:last-child { border-bottom: none; }
+
+    /* ── Header ── */
+    .header-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .venue {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--light);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 28px;
+      max-width: 640px;
+    }
+
+    .authors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      margin-bottom: 24px;
+    }
+
+    .author {
+      font-size: 15px;
+      color: var(--mid);
+    }
+
+    .author + .author::before {
+      content: "·";
+      margin: 0 10px;
+      color: var(--rule);
+    }
+
+    .header-links {
+      display: flex;
+      gap: 20px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .pill-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      border: 1.5px solid var(--black);
+      padding: 7px 16px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .pill-link:hover {
+      background: var(--black);
+      color: var(--bg);
+    }
+
+    .pill-link svg { flex-shrink: 0; }
+
+    /* ── Section headings ── */
+    h2 {
+      font-family: 'DM Mono', monospace;
+      font-size: 18px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--light);
+      margin-bottom: 20px;
+    }
+
+    p { margin-bottom: 1em; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── Upload ── */
+    .upload-area {
+      border: 1.5px dashed var(--rule);
+      padding: 48px 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .upload-area:hover, .upload-area.dragover {
+      border-color: var(--black);
+      background: var(--hover);
+    }
+
+    .upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .upload-icon {
+      margin-bottom: 16px;
+      color: var(--light);
+    }
+
+    .upload-label {
+      font-size: 15px;
+      color: var(--mid);
+    }
+
+    .upload-label strong {
+      color: var(--black);
+      font-weight: 600;
+    }
+
+    .upload-hint {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--light);
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    #preview-container {
+      display: none;
+      margin-top: 28px;
+      text-align: center;
+    }
+
+    #preview-img {
+      max-width: 100%;
+      max-height: 360px;
+      border: 1px solid var(--rule);
+      display: block;
+      margin: 0 auto 20px;
+    }
+
+    .btn-run {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--black);
+      color: var(--bg);
+      border: none;
+      padding: 12px 32px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .btn-run:hover { opacity: 0.75; }
+    .btn-run:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    #result-box {
+      display: none;
+      margin-top: 28px;
+      border: 1.5px solid var(--black);
+      padding: 24px 28px;
+    }
+
+    .result-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--light);
+      margin-bottom: 8px;
+    }
+
+    .result-emotion {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      text-transform: capitalize;
+    }
+
+    .result-confidence {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--mid);
+      margin-top: 4px;
+    }
+
+    .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--rule);
+      border-top-color: var(--black);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Results / figures placeholder ── */
+    .results-placeholder {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .fig-placeholder {
+      border: 1px solid var(--rule);
+      aspect-ratio: 4/3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+      gap: 8px;
+    }
+
+    .fig-placeholder span {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--light);
+    }
+
+    .coming-soon {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--light);
+      border: 1px solid var(--rule);
+      display: inline-block;
+      padding: 4px 10px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 560px) {
+      .results-placeholder { grid-template-columns: 1fr; }
+      .authors { flex-direction: column; }
+      .author + .author::before { display: none; }
+    }
+
+    /* ── Results: sample prediction grid ── */
+    .results-sample-grid {
+      margin-bottom: 40px;
+    }
+
+    .results-col-label-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .results-col-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 5px 10px;
+      border: 1px solid var(--rule);
+    }
+
+    .results-col-label {
+      color: var(--mid);
+      background: #f9f9f9;
+    }
+
+    .results-img-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .results-figure {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .results-figure img {
+      width: 100%;
+      object-fit: contain;
+      border: 1px solid var(--rule);
+      display: block;
+    }
+
+    .results-figure figcaption {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--light);
+      text-align: center;
+    }
+
+    /* Full-width figures */
+    .results-figure--full {
+      margin-bottom: 24px;
+    }
+
+    .results-figure--full img {
+      aspect-ratio: unset;
+      object-fit: contain;
+      width: 100%;
+    }
+
+    /* Side-by-side pair */
+    .results-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .results-two-col .results-figure img {
+      aspect-ratio: unset;
+      object-fit: contain;
+      width: 100%;
+    }
+
+    @media (max-width: 560px) {
+      .results-img-grid,
+      .results-col-label-row,
+      .results-two-col { grid-template-columns: 1fr; }
+    }
